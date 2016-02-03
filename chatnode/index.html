@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Chat</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            var socket = io();
+            $(function () {
+                $("form").submit(function () {
+                    var mensaje = $("#texto").val();
+                    if (mensaje == '')
+                        return false;
+                    socket.emit("message", mensaje);
+                    $("#texto").val("").focus();
+                    return false;
+                })
+                $("#canal").change(function () {
+                    socket.emit("change channel", $(this).val());
+                })
+
+                $("#texto").keyup(function () {
+                    socket.emit("writeOn", $(this).val());
+                })
+
+            })
+
+
+            socket.on("message", function (msj, id) {
+                $("#mensaje").append($("<li>").text(id + " : " + msj));
+            })
+
+            socket.on("change channel", function (canal) {
+                $("#mensaje").html("").append($("<li>").text("Sysmte: Bienvenido al canal " + canal));
+            })
+
+            socket.on("writeOn", function (msj, id) {
+                console.log(id);
+                if (msj.length == 0) {
+                    $("#temp").html("").css({"display": "none"});
+                } else {
+                    $("#temp").css({"display": "inline"}).html(id + "esta escribiendo ...");
+                }
+
+            })
+        </script>
+
+    </head>
+    <body>
+        <ul id="mensaje">
+
+        </ul>
+        <p id='temp' style="display: none"></p>
+        <div id="controles">
+            <form action="">
+                <select id='canal'>
+                    <option value="canal1">Canal1</option>
+                    <option value="canal2">Canal2</option>
+                </select><br>
+                <input type="text" id="texto" name="texto" placeholder="escribe">
+                <button id="enviar">Enviar</button>
+            </form>
+        </div>
+    </body>
+</html>
