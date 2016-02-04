@@ -30,17 +30,16 @@
 
 
             socket.on("message", function (msj, id) {
-                $("#mensaje").html("").append('<a href="#" class="list-group-item">+' + id + ' : ' + msj + '</a>');
-//                $("#mensaje").append($("<li>").text(id + " : " + msj));
+                $(".mensaje").html(($(".mensaje").html()).replace("active", ''));
+                $(".mensaje").prepend('<a href="#" class="list-group-item active">' + id + ' : ' + msj + '</a>');
             })
 
             socket.on("change channel", function (canal) {
-                $("#mensaje").html("").append('<a href="#" class="list-group-item">System: Bienvenido al canal ' + canal + '</a>');
-//                $("#mensaje").html("").append($("<li>").text("Sysmte: Bienvenido al canal " + canal));
+                $(".mensaje").html(($(".mensaje").html()).replace("active", ''));
+                $(".mensaje").prepend('<a href="#" class="list-group-item active">System: Bienvenido al canal ' + canal + '</a>');
             })
 
             socket.on("writeOn", function (msj, id) {
-
                 if (msj.length == 0) {
                     $("#temp").html("").css({"display": "none"});
                 } else {
@@ -69,7 +68,7 @@
                             <p id='temp' style="display: none"></p>
                         </div>
                     </div>
-
+                    <br>
                     <div class="row">
                         <div class="col-lg-12">
                             <div id="controles">
